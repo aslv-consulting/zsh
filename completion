@@ -1,0 +1,8 @@
+autoload -U compinit 
+compinit -i
+
+fpath+=~/.zsh/zsh-completions/src 
+fpath+=~/.zsh/zsh-completions/completions
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+setopt CORRECT

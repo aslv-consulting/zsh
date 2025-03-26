@@ -1,0 +1,6 @@
+source ./path
+source ./completion
+source ./prompt
+source ./aliases
+
+eval "$(direnv hook $SHELL)"

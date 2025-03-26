@@ -1,0 +1,107 @@
+
+typeset -g __START_TIME
+typeset -g __END_TIME
+typeset -g __EXECUTION_TIME
+
+function git_branch {
+  git symbolic-ref --short HEAD 2> /dev/null
+}
+
+function git_status {
+  local git_status_output=$(git status --porcelain 2> /dev/null)
+  if [[ -n $git_status_output ]]; then
+    echo "%F{red}*%f"
+  else
+    echo "%F{green}✔%f"
+  fi
+}
+
+function git_ahead_behind {
+  local ahead=$(git rev-list --count @{u}..HEAD 2> /dev/null)
+  local behind=$(git rev-list --count HEAD..@{u} 2> /dev/null)
+  local ahead_color behind_color
+
+  if [[ $ahead -eq 0 ]]; then
+    ahead_color="%F{green}"
+  else
+    ahead_color="%F{red}"
+  fi
+
+  if [[ $behind -eq 0 ]]; then
+    behind_color="%F{green}"
+  else
+    behind_color="%F{red}"
+  fi
+
+  if [[ -n $ahead || -n $behind ]]; then
+    echo "${ahead_color}↑$ahead%f ${behind_color}↓$behind%f"
+  fi
+}
+
+function git_changes {
+  local changes=$(git diff --shortstat 2> /dev/null)
+  local files_changed=$(echo "$changes" | grep -Eo '[0-9]+ file' | grep -Eo '[0-9]+')
+  local insertions=$(echo "$changes" | grep -Eo '[0-9]+ insertion' | grep -Eo '[0-9]+')
+  local deletions=$(echo "$changes" | grep -Eo '[0-9]+ deletion' | grep -Eo '[0-9]+')
+  local changes_color files_color insertions_color deletions_color
+
+  if [[ -z $files_changed ]]; then
+    files_changed=0
+  fi
+
+  if [[ -z $insertions ]]; then
+    insertions=0
+  fi
+
+  if [[ -z $deletions ]]; then
+    deletions=0
+  fi
+
+  if [[ $files_changed -eq 0 ]]; then
+    files_color="%F{green}"
+  else
+    files_color="%F{red}"
+  fi
+
+  if [[ $insertions -eq 0 ]]; then
+    insertions_color="%F{green}"
+  else
+    insertions_color="%F{red}"
+  fi
+
+  if [[ $deletions -eq 0 ]]; then
+    deletions_color="%F{green}"
+  else
+    deletions_color="%F{red}"
+  fi
+
+  echo "${files_color}→$files_changed%f ${insertions_color}+ $insertions%f ${deletions_color}- $deletions%f"
+}
+
+function git_info {
+  if git rev-parse --is-inside-work-tree &> /dev/null; then
+    echo " %F{cyan}$(git_branch)%f $(git_status) $(git_ahead_behind) $(git_changes)"
+  fi
+}
+
+function exit_code {
+  if [[ $1 -eq 0 ]]; then
+    echo "%F{green}0%f"
+  else
+    echo "%F{red}$1%f"
+  fi
+}
+
+setopt PROMPT_SUBST
+
+function preexec() {
+  __START_TIME=$(($(date +%s)*1000 + $(date +%N)/1000000))
+}
+
+function precmd {
+  __END_TIME=$(($(date +%s)*1000 + $(date +%N)/1000000))
+  __EXECUTION_TIME=$((__END_TIME - __START_TIME))
+  local last_exit_code=$?
+  venv=${VIRTUAL_ENV:t}
+  PROMPT=$'\n['"$(exit_code $last_exit_code)"$'] %F{208}[${__EXECUTION_TIME}ms]%f [$venv] %F{yellow}%~%f $(git_info)\n→ '
+}
