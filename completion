@@ -1,8 +1,7 @@
 autoload -U compinit 
 compinit -i
 
-fpath+=~/.zsh/zsh-completions/src 
-fpath+=~/.zsh/zsh-completions/completions
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-setopt CORRECT
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

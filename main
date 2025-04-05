@@ -1,6 +1,4 @@
-source ./path
-source ./completion
-source ./prompt
-source ./aliases
-
-eval "$(direnv hook $SHELL)"
+source $zsh_config_path/path
+source $zsh_config_path/completion
+source $zsh_config_path/prompt
+source $zsh_config_path/aliases
