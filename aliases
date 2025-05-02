@@ -1,4 +1,4 @@
-alias "ll"='ls -la'
+alias "ll"='ls -la -G'
 alias v='nvim'
 alias g='git'
 

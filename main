@@ -1,4 +1,7 @@
+source $zsh_config_path/colors
 source $zsh_config_path/path
 source $zsh_config_path/completion
 source $zsh_config_path/prompt
 source $zsh_config_path/aliases
+
+eval "$(direnv hook zsh)"
