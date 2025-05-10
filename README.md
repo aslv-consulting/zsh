@@ -8,14 +8,15 @@ In your .zshrc file, add the following line:
 
 ```bash
 export zsh_config_path=$HOME/projects/zsh
-source ~/projects/zsh/main
+source $zsh_config_path/main
 ```
 
-## Reload configuration
+## Prerequisites
 
 ```bash
-source ~/.zshrc
+brew install neovim direnv
 ```
+
 
 ## Plugins
 
@@ -27,15 +28,19 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosugges
 git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
 ```
 
+## Reload configuration
+
+```bash
+source ~/.zshrc
+```
+
+
 ## App
 
 ### Neovim
 
 If you want to use neovim, use the 'v' command.
 
-```bash
-brew install neovim
-```
 
 ### Git
 
