@@ -39,7 +39,7 @@ source ~/.zshrc
 
 ### Neovim
 
-If you want to use neovim, use the 'v' command.
+If you want to use "neovim", use the 'v' command.
 
 
 ### Git
